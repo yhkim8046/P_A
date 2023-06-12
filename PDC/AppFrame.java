@@ -21,7 +21,7 @@ public class AppFrame extends JFrame
     public AppFrame()
     {
         this.setTitle("Bookings");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         
         this.setSize(width,height);
         this.setResizable(false);
@@ -35,8 +35,6 @@ public class AppFrame extends JFrame
         
         SearchButtonController searchController = new SearchButtonController();
         searchButton.addActionListener(searchController);
-        
-        
         
         checkButton = new JButton("Check booking");
         checkButton.setBounds(150, 200, 100, 50);

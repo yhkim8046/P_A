@@ -81,6 +81,6 @@ public class Hotel
     
     public String toString()
     {
-        return this.getName() + ", " + this.getLocation() + ": " + this.getStars() +"stars $" + this.getCosts();
+        return this.getName() + ", " + this.getLocation() + ": " + this.getStars() +"stars $ " + this.getCosts();
     }
 }
