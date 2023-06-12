@@ -15,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,6 +35,7 @@ public class SearchFrame extends JFrame {
     private JMenuItem exitMenu;
     private JButton bookingButton;
     private Hotel selectedHotel;
+   
 
     public SearchFrame() {
         String[] cities = {"Auckland", "Christchurch"};
@@ -66,8 +68,16 @@ public class SearchFrame extends JFrame {
         this.add(bookingButton);
         bookingButton.setBounds(300,250,100,50); 
         bookingButton.setVisible(true);
-        BookingButtonController bookingButtonController = new BookingButtonController();
-        bookingButton.addActionListener(bookingButtonController);
+        bookingButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+        Hotel selectedHotel = getSelectedHotel(); // Get the selected hotel from SearchFrame
+        if (selectedHotel != null) {
+            BookingSystem bookingSystem = new BookingSystem(selectedHotel); // Pass the selected hotel to BookingSystem
+        } else {
+            JOptionPane.showMessageDialog(SearchFrame.this, "Please select a hotel.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+});
         
         au = new Auckland();
         au.displayHotels(AucklandPanel);
@@ -103,6 +113,7 @@ public class SearchFrame extends JFrame {
                 }
             }
         });
+        
     }
 
     private void populateComboBox(ArrayList<Hotel> hotels) { //Displaying hotels 

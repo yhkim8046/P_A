@@ -19,11 +19,13 @@ public class BookingSystem extends JFrame{
     private int width = 400;
     private JMenuBar menuBar;
     private JMenuItem exitMenu;
-    private int confirmHotelName; // used for confirmation of the name of hotel being booked
-    private SearchFrame sf;
+    private int confirm; //confirm the hotel which is being booked
+    private Hotel selectedHotel;
     
-    public BookingSystem()
+    
+    public BookingSystem(Hotel selectedHotel)
     {
+        this.selectedHotel = selectedHotel;
         this.setTitle("Check booking");
         this.dispose();
         this.setSize(width,height);
@@ -33,23 +35,21 @@ public class BookingSystem extends JFrame{
         this.setLayout(null);
         
         menuBar = new JMenuBar();
-        exitMenu = new JMenuItem("Exit"); //program exit menuitem
+        exitMenu = new JMenuItem("Exit"); //program exit menu item
         menuBar.add(exitMenu);
         this.setJMenuBar(menuBar);
       
-        exitMenu.addActionListener(new CheckFrame.exit());
+        exitMenu.addActionListener(new CheckFrame.exit()); 
         
-        sf = new SearchFrame();
+        confirm = JOptionPane.showConfirmDialog(null, "Please confirm the hotel again. Hotel: " + selectedHotel.getName(), "Confirmation", JOptionPane.YES_NO_OPTION);
         
-        confirmHotelName = JOptionPane.showConfirmDialog(null, "Please confirm the hotel again:  " + sf.getSelectedHotel(), "Confirmation", JOptionPane.YES_NO_OPTION);
-        if(confirmHotelName == JOptionPane.YES_OPTION)
-        {
-            this.dispose();
+        if (confirm == JOptionPane.YES_OPTION) {
+            // User clicked "Yes"
+          
+        } else {
+            // User clicked "No" or closed the dialog
+            this.dispose(); //exit the window to select again 
         }
-        else
-        {
-            this.dispose();
-        }
+        
     }
-    
 }
