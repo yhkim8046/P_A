@@ -15,7 +15,7 @@ public class Guest
     private String email;
     private String mobile;
     
-    public Guest(String firstName, String lastName, String email, String mobile)
+    public Guest()
     {
         this.firstName = firstName;
         this.lastName = lastName;
