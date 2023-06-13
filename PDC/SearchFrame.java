@@ -31,6 +31,7 @@ public class SearchFrame extends JFrame {
     private JPanel ChPanel;
     private JComboBox hotelComboBox;
     private ChristChurch ch;
+    
     private JMenuBar menuBar;
     private JMenuItem exitMenu;
     private JButton bookingButton;

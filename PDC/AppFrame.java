@@ -43,9 +43,7 @@ public class AppFrame extends JFrame
         CheckButtonControlloer checkButtonControlloer = new CheckButtonControlloer();
         checkButton.addActionListener(checkButtonControlloer);
         
-        
         this.revalidate(); // Update the frame's layout
         this.repaint();    // Repaint the frame to display the buttons
-        
     }
 }

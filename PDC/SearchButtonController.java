@@ -22,7 +22,6 @@ public class SearchButtonController implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e) {
         sf = new SearchFrame();
-        sf.setVisible(true);
-        
+        sf.setVisible(true);   
     }
 }
