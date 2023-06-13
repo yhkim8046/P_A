@@ -8,6 +8,9 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -33,7 +36,7 @@ public class BookingSystem extends JFrame {
 
     private int confirm; //confirm the hotel which is being booked
 
-    private Hotel selectedHotel;
+    private final Hotel selectedHotel;
     private Guest guest;
 
     private JPanel mainPanel;
@@ -41,11 +44,18 @@ public class BookingSystem extends JFrame {
     private JPanel firstNamePanel;
     private JPanel emailPanel;
     private JPanel mobilePanel;
+    private JPanel nullWarning;
+    private JPanel checkInPanel;
+    private JPanel checkOutPanel;
 
     private JTextField lastNameTextField;
     private JTextField firstNameTextField;
     private JTextField emailTextField;
     private JTextField mobileTextField;
+    private JTextField checkInTextField;
+    private JTextField checkOutTextField;
+
+    private JLabel nullWarningLabel;
 
     private JButton submitButton;
     private BookingResultFrame bookingResultFrame;
@@ -109,20 +119,56 @@ public class BookingSystem extends JFrame {
         guest.setMobile(mobileTextField.getText());
         mainPanel.add(Box.createVerticalGlue());
 
+        checkInTextField = new JTextField(20);
+        checkInPanel = createQuestions("Check-in Date(dd/mm/yyyy) : ", checkInTextField);
+        checkInPanel.setAlignmentX(0.5f);
+        mainPanel.add(checkInPanel);
+        mainPanel.add(Box.createVerticalGlue());
+
+        checkOutTextField = new JTextField(20);
+        checkOutPanel = createQuestions("Check-out Date(dd/mm/yyyy) : ", checkOutTextField);
+        checkOutPanel.setAlignmentX(0.5f);
+        mainPanel.add(checkOutPanel);
+        mainPanel.add(Box.createVerticalGlue());
+
         submitButton = new JButton("Submit");
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(submitButton);
         this.add(buttonPanel, BorderLayout.SOUTH);
         this.add(mainPanel, BorderLayout.CENTER);
-        
+
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                 bookingResultFrame = new BookingResultFrame();
-                 bookingResultFrame.setVisible(true);
+                if (lastNameTextField.getText() != null && !lastNameTextField.getText().isEmpty()
+                        && firstNameTextField.getText() != null && !firstNameTextField.getText().isEmpty()
+                        && emailTextField.getText() != null && !emailTextField.getText().isEmpty()
+                        && mobileTextField.getText() != null && !mobileTextField.getText().isEmpty()
+                        && isDateFormatValid(checkInTextField.getText()) && isDateFormatValid(checkOutTextField.getText())) {
+
+                    guest.setLastName(lastNameTextField.getText());
+                    guest.setFirstName(firstNameTextField.getText());
+                    guest.setEmail(emailTextField.getText());
+                    guest.setMobile(mobileTextField.getText());
+
+                    String checkInDateStr = checkInTextField.getText();
+                    String checkOutDateStr = checkOutTextField.getText();
+
+                    LocalDate checkInDate = LocalDate.parse(checkInDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    LocalDate checkOutDate = LocalDate.parse(checkOutDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+                    guest.setCheckInDate(checkInDate);
+                    guest.setCheckOutDate(checkOutDate);
+
+                    bookingResultFrame = new BookingResultFrame(guest);
+                    bookingResultFrame.setVisible(true);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please fill in all fields and enter valid date format (dd/mm/yyyy).");
+                }
             }
         });
-        this.setVisible(true);
 
+        this.setVisible(true);
     }
 
     private JPanel createQuestions(String labelText, JTextField textField) {
@@ -132,5 +178,14 @@ public class BookingSystem extends JFrame {
         panel.add(new JLabel(labelText));
         panel.add(textField);
         return panel;
+    }
+
+    private boolean isDateFormatValid(String date) {
+        try {
+            LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 }
