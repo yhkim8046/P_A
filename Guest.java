@@ -8,7 +8,9 @@ package PDC;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import javax.swing.JTextField;
 
 /**
  *
@@ -16,21 +18,28 @@ import java.util.Date;
  */
 public class Guest 
 {
+    private Hotel hotel;
+    
     private String firstName;
     private String lastName;
     private String email;
     private String mobile;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
+    private long nights;
+    private int totalPrice;
+    private String selectedHotelName;
     
     public Guest()
     {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.mobile = mobile;
-        this.checkInDate = checkInDate; 
-        this.checkOutDate = checkOutDate;
+        this.firstName = "";
+        this.lastName = "";
+        this.email = "";
+        this.mobile = "";
+        this.checkInDate = null; 
+        this.checkOutDate = null;
+        this.nights = 0;
+        this.selectedHotelName = ""; 
     }
 
     /**
@@ -100,7 +109,7 @@ public class Guest
     public String getFormattedBookingDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedCheckInDate = getCheckInDate().format(formatter);
-        String formattedCheckOutDate = getCheckInDate().format(formatter);
+        String formattedCheckOutDate = getCheckOutDate().format(formatter);
         return formattedCheckInDate + " - " + formattedCheckOutDate;
     }
 
@@ -112,10 +121,10 @@ public class Guest
         return checkInDate;
     }
 
-    /**
-     * @param checkInDate the checkInDate to set
-     */
-    public void setCheckInDate(LocalDate checkInDate) {
+   
+   public void setCheckInDate(String checkInDateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate checkInDate = LocalDate.parse(checkInDateStr, formatter);
         this.checkInDate = checkInDate;
     }
 
@@ -125,15 +134,34 @@ public class Guest
     public LocalDate getCheckOutDate() {
         return checkOutDate;
     }
-
-    /**
-     * @param checkOutDate the checkOutDate to set
-     */
-    public void setCheckOutDate(LocalDate checkOutDate) {
+   public void setCheckOutDate(String checkOutDateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate checkOutDate = LocalDate.parse(checkOutDateStr, formatter);
         this.checkOutDate = checkOutDate;
     }
 
-   
+
+    public long getNights() {
+        return checkInDate.until(checkOutDate, ChronoUnit.DAYS);
+    }
+
+    public void setTotalPrice(int costs, long nights)
+    {
+        this.totalPrice = costs * (int)nights; 
+    }
     
+    public int getTotalPrice()
+    {
+        return this.totalPrice;
+    }
     
+    public void setSelectedHotelName(String name)
+    {
+        this.selectedHotelName = name;
+    }
+    public String getSelectedHotelName()
+    {
+        return this.selectedHotelName;
+    }
 }
+    
