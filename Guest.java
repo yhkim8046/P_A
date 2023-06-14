@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import javax.swing.JTextField;
-
+import java.util.Random;
 /**
  *
  * @author yuhwankim
@@ -29,6 +29,10 @@ public class Guest
     private long nights;
     private int totalPrice;
     private String selectedHotelName;
+    private String reference;
+    private String[] referenceArray;
+    
+    
     
     public Guest()
     {
@@ -39,9 +43,10 @@ public class Guest
         this.checkInDate = null; 
         this.checkOutDate = null;
         this.nights = 0;
-        this.selectedHotelName = ""; 
+        this.selectedHotelName = "";
+        this.reference = "";
+        this.referenceArray = new String[6];
     }
-
     /**
      * @return the firstName
      */
@@ -163,5 +168,28 @@ public class Guest
     {
         return this.selectedHotelName;
     }
+    
+   public String setReference() {
+    Random random = new Random();
+    StringBuilder referenceBuilder = new StringBuilder();
+    String[] strings = new String[8]; // Or use a List<String> instead
+
+    for (int i = 0; i < strings.length; i++) {
+        int randomNumber = random.nextInt(26) + 1;
+        char randomChar = (char) ('A' + randomNumber - 1);
+        strings[i] = String.valueOf(randomChar);
+        referenceBuilder.append(strings[i]);
+    }
+
+    reference = referenceBuilder.toString();
+   
+    return reference;
+}
+
+    
+   public String getReferene()
+   {
+       return this.reference;
+   }
 }
     
