@@ -141,8 +141,8 @@ public class BookingSystem extends JFrame {
         this.add(mainPanel, BorderLayout.CENTER);
 
         submitButton.addActionListener((ActionEvent e) -> {
-    guest = new Guest();
-    if (lastNameTextField.getText() != null && !lastNameTextField.getText().isEmpty()
+        guest = new Guest();
+         if (lastNameTextField.getText() != null && !lastNameTextField.getText().isEmpty()
             && firstNameTextField.getText() != null && !firstNameTextField.getText().isEmpty()
             && emailTextField.getText() != null && !emailTextField.getText().isEmpty()
             && mobileTextField.getText() != null && !mobileTextField.getText().isEmpty()) {
@@ -160,19 +160,19 @@ public class BookingSystem extends JFrame {
             LocalDate checkInDate = LocalDate.parse(checkInDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             LocalDate checkOutDate = LocalDate.parse(checkOutDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-            if (checkOutDate.isBefore(checkInDate) || checkInDate.isAfter(lastDay) || checkInDate.isBefore(currentDate)) {
-                JOptionPane.showMessageDialog(null, "Check-out date cannot be earlier than the check-in date. \n Check In date must be between today's date and end of the year.");
+            if (checkOutDate.isBefore(checkInDate) || checkInDate.isAfter(lastDay) || checkInDate.isBefore(currentDate) || checkInDate.isEqual(checkOutDate)) {
+                JOptionPane.showMessageDialog(null, "Check-out date cannot be earlier than the check-in date. \n Check In date must be between today's date and end of the year. \n Check-in date and Check-out date can not be same.");
                 return; // Exit to prevent an error
             }
 
-            guest.setLastName(lastNameTextField.getText());
-            guest.setFirstName(firstNameTextField.getText());
-            guest.setEmail(emailTextField.getText());
+            guest.setLastName(lastNameTextField.getText().toLowerCase());
+            guest.setFirstName(firstNameTextField.getText().toLowerCase());
+            guest.setEmail(emailTextField.getText().toLowerCase());
             guest.setMobile(mobileTextField.getText());
             guest.setCheckInDate(checkInDateStr);
             guest.setCheckOutDate(checkOutDateStr);
             guest.setTotalPrice(selectedHotel.getCosts(), guest.getNights());
-            guest.setSelectedHotelName(selectedHotel.getName());
+            guest.setSelectedHotelName(selectedHotel.getName().toLowerCase());
           
             // Create the SQL INSERT statement
            String sql = "INSERT INTO guests (last_name, first_name, email, mobile, check_in_date, check_out_date, total_price, selected_hotel) " +
@@ -203,7 +203,7 @@ public class BookingSystem extends JFrame {
     this.setVisible(true);
 
 }
-    private JPanel createQuestions(String labelText, JTextField textField) {
+    private JPanel createQuestions(String labelText, JTextField textField) { //To consolidate the questions
         JPanel panel = new JPanel();
         FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 0, 0);
         panel.setLayout(flowLayout);
@@ -212,7 +212,7 @@ public class BookingSystem extends JFrame {
         return panel;
     }
 
-   private void validateDateFormat(String date) throws DateTimeParseException {
+   private void validateDateFormat(String date) throws DateTimeParseException { // to verify the date is valid or not 
     LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
    }
   

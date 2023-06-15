@@ -12,7 +12,7 @@ import javax.swing.JFrame;
  *
  * @author yuhwankim
  */
-public class AppFrame extends JFrame
+public class AppFrame extends JFrame // First frame
 {
     public static final int height = 400;
     public static final int width = 400;
@@ -30,14 +30,14 @@ public class AppFrame extends JFrame
         this.setVisible(true);
         this.setLayout(null);
       
-        searchButton = new JButton("Search Hotels");
+        searchButton = new JButton("Search Hotels"); //Search button 
         searchButton.setBounds(150, 100, 100, 50);
         this.add(searchButton);
         
         SearchButtonController searchController = new SearchButtonController();
         searchButton.addActionListener(searchController);
         
-        checkButton = new JButton("Check booking");
+        checkButton = new JButton("Check booking"); //check button
         checkButton.setBounds(150, 200, 100, 50);
         this.add(checkButton);
         

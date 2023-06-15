@@ -31,11 +31,11 @@ public class Guest
     private String selectedHotelName;
     private String reference;
     private String[] referenceArray;
-    
-    
+    private String guestId;
     
     public Guest()
     {
+        this.guestId ="";
         this.firstName = "";
         this.lastName = "";
         this.email = "";
@@ -60,7 +60,14 @@ public class Guest
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
+    
+    public String getGuestID() {
+        return guestId;
+    }
+    
+    public void setGuestID(String reference) {
+        this.guestId = reference;
+    }
     /**
      * @return the lastName
      */

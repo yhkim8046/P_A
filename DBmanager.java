@@ -28,8 +28,9 @@ public class DBmanager {
         return this.conn;
     }
 
-    public void createGuestsTable() {
-    String tableName = "GUESTS";
+    public void createGuestsTable() //creating Guests Table
+    {
+        String tableName = "GUESTS";
 
     // Check if the table already exists
     try {
@@ -58,13 +59,67 @@ public class DBmanager {
         "SELECTED_HOTEL VARCHAR(100)" +
         ")";
 
-    updateDB(sql);
-}
-
-
-
-
+        updateDB(sql);
+    }
     
+    
+    public void createChHotelsTable() { //Creating ChristChurch Hotels 
+        String tableName = "CHRISTCHURCHHOTELS";
+
+        // Check if the table already exists
+        try {
+            DatabaseMetaData metaData = conn.getMetaData();
+            ResultSet resultSet = metaData.getTables(null, null, tableName.toUpperCase(), null);
+
+            if (resultSet.next()) {
+                System.out.println("Table '" + tableName + "' already exists in Schema 'PDC'.");
+                return;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return;
+        }
+
+        // Create the table if it doesn't exist
+        String sql = "CREATE TABLE " + tableName + " (" +
+                "HOTEL_ID INT PRIMARY KEY," +
+                "NAME VARCHAR(100) NOT NULL," +
+                "LOCATION VARCHAR(100) NOT NULL," +
+                "STARS INT NOT NULL," +
+                "COST INT NOT NULL" +
+                ")";
+
+        updateDB(sql);
+    }
+      public void createAucklandHotelsTable() { //Creating Auckland Hotels
+        String tableName = "AUCKLANDHOTELS";
+
+        // Check if the table already exists
+        try {
+            DatabaseMetaData metaData = conn.getMetaData();
+            ResultSet resultSet = metaData.getTables(null, null, tableName.toUpperCase(), null);
+
+            if (resultSet.next()) {
+                System.out.println("Table '" + tableName + "' already exists in Schema 'PDC'.");
+                return;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return;
+        }
+
+        // Create the table if it doesn't exist
+        String sql = "CREATE TABLE " + tableName + " (" +
+                "HOTEL_ID INT PRIMARY KEY," +
+                "NAME VARCHAR(100) NOT NULL," +
+                "LOCATION VARCHAR(100) NOT NULL," +
+                "STARS INT NOT NULL," +
+                "COST INT NOT NULL" +
+                ")";
+
+        updateDB(sql);
+    }
+      
     //Establish connection
     public void establishConnection() {
         if (this.conn == null) {
@@ -76,7 +131,7 @@ public class DBmanager {
             }
         }
     }
-
+    //Connection closing
     public void closeConnections() {
         if (conn != null) {
             try {
