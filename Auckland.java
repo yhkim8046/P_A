@@ -4,7 +4,6 @@
  */
 package PDC;
 
-
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.JLabel;

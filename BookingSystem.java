@@ -89,7 +89,7 @@ public class BookingSystem extends JFrame {
         notice.setVisible(true);
         this.add(notice);
 
-        
+        guest = new Guest();
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -98,24 +98,25 @@ public class BookingSystem extends JFrame {
         lastNamePanel = createQuestions("Last Name:", lastNameTextField);
         lastNamePanel.setAlignmentX(0.5f); // Align center horizontally
         mainPanel.add(lastNamePanel);
-        
+        guest.setLastName(lastNameTextField.getText());
 
         firstNameTextField = new JTextField(20);
         firstNamePanel = createQuestions("First Name:", firstNameTextField);
         firstNamePanel.setAlignmentX(0.5f); // Align center horizontally
         mainPanel.add(firstNamePanel);
-        
+        guest.setFirstName(firstNameTextField.getText());
 
         emailTextField = new JTextField(20);
         emailPanel = createQuestions("E-mail Address:", emailTextField);
         emailPanel.setAlignmentX(0.5f); // Align center horizontally
         mainPanel.add(emailPanel);
-       
+        guest.setEmail(emailTextField.getText());
 
         mobileTextField = new JTextField(20);
         mobilePanel = createQuestions("Mobile:", mobileTextField);
         mobilePanel.setAlignmentX(0.5f); // Align center horizontally
         mainPanel.add(mobilePanel);
+        guest.setMobile(mobileTextField.getText());
         mainPanel.add(Box.createVerticalGlue());
 
         checkInTextField = new JTextField(20);
@@ -123,7 +124,6 @@ public class BookingSystem extends JFrame {
         checkInPanel.setAlignmentX(0.5f);
         mainPanel.add(checkInPanel);
         mainPanel.add(Box.createVerticalGlue());
-        
 
         checkOutTextField = new JTextField(20);
         checkOutPanel = createQuestions("Check-out Date(dd/mm/yyyy) : ", checkOutTextField);
@@ -139,7 +139,6 @@ public class BookingSystem extends JFrame {
 
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                guest = new Guest();
                 if (lastNameTextField.getText() != null && !lastNameTextField.getText().isEmpty()
                         && firstNameTextField.getText() != null && !firstNameTextField.getText().isEmpty()
                         && emailTextField.getText() != null && !emailTextField.getText().isEmpty()
@@ -154,13 +153,11 @@ public class BookingSystem extends JFrame {
                     String checkInDateStr = checkInTextField.getText();
                     String checkOutDateStr = checkOutTextField.getText();
 
-            LocalDate checkInDate = LocalDate.parse(checkInDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            LocalDate checkOutDate = LocalDate.parse(checkOutDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    LocalDate checkInDate = LocalDate.parse(checkInDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    LocalDate checkOutDate = LocalDate.parse(checkOutDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-            guest.setCheckInDate(checkInDateStr);
-            guest.setCheckOutDate(checkOutDateStr);
-            guest.setTotalPrice(selectedHotel.getCosts(),guest.getNights()); 
-            guest.setSelectedHotelName(selectedHotel.getName());
+                    guest.setCheckInDate(checkInDate);
+                    guest.setCheckOutDate(checkOutDate);
 
                     bookingResultFrame = new BookingResultFrame(guest);
                     bookingResultFrame.setVisible(true);

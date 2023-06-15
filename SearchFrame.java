@@ -4,7 +4,6 @@
  */
 package PDC;
 
-
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -79,7 +78,7 @@ public class SearchFrame extends JFrame {
             JOptionPane.showMessageDialog(SearchFrame.this, "Please select a hotel.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-        });
+});
         
         au = new Auckland();
         au.displayHotels(AucklandPanel);

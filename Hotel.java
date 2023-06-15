@@ -4,8 +4,6 @@
  */
 package PDC;
 
-
-
 /**
  *
  * @author yuhwankim
