@@ -38,6 +38,7 @@ public class BookingSystem extends JFrame {
 
     private final Hotel selectedHotel;
     private Guest guest;
+    private DBmanager db;
 
     private JPanel mainPanel;
     private JPanel lastNamePanel;
@@ -88,8 +89,10 @@ public class BookingSystem extends JFrame {
         notice.setBounds(125, -30, 200, 100);
         notice.setVisible(true);
         this.add(notice);
-
-        guest = new Guest();
+        
+        db = new DBmanager();
+        db.createGuestsTable();
+        
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -98,25 +101,24 @@ public class BookingSystem extends JFrame {
         lastNamePanel = createQuestions("Last Name:", lastNameTextField);
         lastNamePanel.setAlignmentX(0.5f); // Align center horizontally
         mainPanel.add(lastNamePanel);
-        guest.setLastName(lastNameTextField.getText());
+        
 
         firstNameTextField = new JTextField(20);
         firstNamePanel = createQuestions("First Name:", firstNameTextField);
         firstNamePanel.setAlignmentX(0.5f); // Align center horizontally
         mainPanel.add(firstNamePanel);
-        guest.setFirstName(firstNameTextField.getText());
+        
 
         emailTextField = new JTextField(20);
         emailPanel = createQuestions("E-mail Address:", emailTextField);
         emailPanel.setAlignmentX(0.5f); // Align center horizontally
         mainPanel.add(emailPanel);
-        guest.setEmail(emailTextField.getText());
+       
 
         mobileTextField = new JTextField(20);
         mobilePanel = createQuestions("Mobile:", mobileTextField);
         mobilePanel.setAlignmentX(0.5f); // Align center horizontally
         mainPanel.add(mobilePanel);
-        guest.setMobile(mobileTextField.getText());
         mainPanel.add(Box.createVerticalGlue());
 
         checkInTextField = new JTextField(20);
@@ -124,6 +126,7 @@ public class BookingSystem extends JFrame {
         checkInPanel.setAlignmentX(0.5f);
         mainPanel.add(checkInPanel);
         mainPanel.add(Box.createVerticalGlue());
+        
 
         checkOutTextField = new JTextField(20);
         checkOutPanel = createQuestions("Check-out Date(dd/mm/yyyy) : ", checkOutTextField);
@@ -137,40 +140,69 @@ public class BookingSystem extends JFrame {
         this.add(buttonPanel, BorderLayout.SOUTH);
         this.add(mainPanel, BorderLayout.CENTER);
 
-        submitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (lastNameTextField.getText() != null && !lastNameTextField.getText().isEmpty()
-                        && firstNameTextField.getText() != null && !firstNameTextField.getText().isEmpty()
-                        && emailTextField.getText() != null && !emailTextField.getText().isEmpty()
-                        && mobileTextField.getText() != null && !mobileTextField.getText().isEmpty()
-                        && isDateFormatValid(checkInTextField.getText()) && isDateFormatValid(checkOutTextField.getText())) {
+        submitButton.addActionListener((ActionEvent e) -> {
+    guest = new Guest();
+    if (lastNameTextField.getText() != null && !lastNameTextField.getText().isEmpty()
+            && firstNameTextField.getText() != null && !firstNameTextField.getText().isEmpty()
+            && emailTextField.getText() != null && !emailTextField.getText().isEmpty()
+            && mobileTextField.getText() != null && !mobileTextField.getText().isEmpty()) {
+        
+        String checkInDateStr = checkInTextField.getText();
+        String checkOutDateStr = checkOutTextField.getText();
+        
+        try {
+            validateDateFormat(checkInDateStr);
+            validateDateFormat(checkOutDateStr);
+            String lastEndDay = "31/12/2023";
+            LocalDate lastDay = LocalDate.parse(lastEndDay, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            LocalDate currentDate = LocalDate.now();
+            
+            LocalDate checkInDate = LocalDate.parse(checkInDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            LocalDate checkOutDate = LocalDate.parse(checkOutDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-                    guest.setLastName(lastNameTextField.getText());
-                    guest.setFirstName(firstNameTextField.getText());
-                    guest.setEmail(emailTextField.getText());
-                    guest.setMobile(mobileTextField.getText());
-
-                    String checkInDateStr = checkInTextField.getText();
-                    String checkOutDateStr = checkOutTextField.getText();
-
-                    LocalDate checkInDate = LocalDate.parse(checkInDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                    LocalDate checkOutDate = LocalDate.parse(checkOutDateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-                    guest.setCheckInDate(checkInDate);
-                    guest.setCheckOutDate(checkOutDate);
-
-                    bookingResultFrame = new BookingResultFrame(guest);
-                    bookingResultFrame.setVisible(true);
-
-                } else {
-                    JOptionPane.showMessageDialog(null, "Please fill in all fields and enter valid date format (dd/mm/yyyy).");
-                }
+            if (checkOutDate.isBefore(checkInDate) || checkInDate.isAfter(lastDay) || checkInDate.isBefore(currentDate)) {
+                JOptionPane.showMessageDialog(null, "Check-out date cannot be earlier than the check-in date. \n Check In date must be between today's date and end of the year.");
+                return; // Exit to prevent an error
             }
+
+            guest.setLastName(lastNameTextField.getText());
+            guest.setFirstName(firstNameTextField.getText());
+            guest.setEmail(emailTextField.getText());
+            guest.setMobile(mobileTextField.getText());
+            guest.setCheckInDate(checkInDateStr);
+            guest.setCheckOutDate(checkOutDateStr);
+            guest.setTotalPrice(selectedHotel.getCosts(), guest.getNights());
+            guest.setSelectedHotelName(selectedHotel.getName());
+          
+            // Create the SQL INSERT statement
+           String sql = "INSERT INTO guests (last_name, first_name, email, mobile, check_in_date, check_out_date, total_price, selected_hotel) " +
+             "VALUES ('" + guest.getLastName() + "', '" + guest.getFirstName() + "', '" + guest.getEmail() + "', '" + guest.getMobile() + "', '" +
+             guest.getCheckInDate() + "', '" + guest.getCheckOutDate() + "', " + guest.getTotalPrice() + ", '" + guest.getSelectedHotelName() + "')";
+
+
+
+            // Execute the SQL statement
+            DBmanager dbManager = new DBmanager();
+            dbManager.updateDB(sql);
+
+             // Close the database connection
+             dbManager.closeConnections();
+
+            bookingResultFrame = new BookingResultFrame(guest);
+            bookingResultFrame.setVisible(true);
+
+        } catch (DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(null, "Please fill in all fields and enter a valid date format (dd/MM/yyyy).");
+        }
+        
+    } else {
+        JOptionPane.showMessageDialog(null, "Please fill in all fields.");
+    }
         });
 
-        this.setVisible(true);
-    }
+    this.setVisible(true);
 
+}
     private JPanel createQuestions(String labelText, JTextField textField) {
         JPanel panel = new JPanel();
         FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 0, 0);
@@ -180,12 +212,8 @@ public class BookingSystem extends JFrame {
         return panel;
     }
 
-    private boolean isDateFormatValid(String date) {
-        try {
-            LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
+   private void validateDateFormat(String date) throws DateTimeParseException {
+    LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+   }
+  
 }

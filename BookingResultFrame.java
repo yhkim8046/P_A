@@ -26,6 +26,7 @@ public class BookingResultFrame extends JFrame
 {
     private int height = 400;
     private int width = 400;
+   
     private JMenuBar menuBar;
     private JMenuItem exitMenu;
     
@@ -59,16 +60,20 @@ public class BookingResultFrame extends JFrame
         this.setJMenuBar(menuBar);
 
         exitMenu.addActionListener(new CheckFrame.exit());
-        
+       
         information = new JPanel();
         information.setLayout(new BoxLayout(information, BoxLayout.Y_AXIS));
+        information.add(createLabel("Thank you for booking ", guest.getSelectedHotelName()));
+        guest.setReference();
+        System.out.println(guest.getReferene());
+        information.add(createLabel("Reference: ", guest.getReferene()));
         information.add(createLabel("Last Name:", guest.getLastName()));
         information.add(createLabel("First Name:", guest.getFirstName()));
         information.add(createLabel("Email Address:", guest.getEmail()));
         information.add(createLabel("Mobile:", guest.getMobile()));
         information.add(createLabel("Staying Date (dd/MM/yyyy):", guest.getFormattedBookingDate()));
-        
-       
+        information.add(createNight(guest.getNights(), "Night(s)"));
+        information.add(createCost("Total Cost: $" , guest.getTotalPrice()));
         information.add(Box.createVerticalGlue());
 
         // Add the main panel to the frame
@@ -77,9 +82,22 @@ public class BookingResultFrame extends JFrame
         this.setVisible(true); 
     }
 
-    private JLabel createLabel(String labelText, String value) {
+    private JLabel createLabel(String labelText, String value) { //For displaying the booking infromation
         JLabel label = new JLabel(labelText + " " + value);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         return label;
+    }
+    
+        private JLabel createNight(long nigths, String s) //For displaying the booking infromation
+        {
+            JLabel label = new JLabel(nigths + s);
+            label.setAlignmentX(Component.CENTER_ALIGNMENT);
+            return label;
+        }
+        
+    private JLabel createCost(String labelText, int costs) { //For displaying the booking infromation
+    JLabel label = new JLabel(labelText + costs);
+    label.setAlignmentX(Component.CENTER_ALIGNMENT);
+    return label;
     }
 }

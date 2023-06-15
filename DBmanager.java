@@ -4,6 +4,7 @@
  */
 package PDC;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,6 +28,43 @@ public class DBmanager {
         return this.conn;
     }
 
+    public void createGuestsTable() {
+    String tableName = "GUESTS";
+
+    // Check if the table already exists
+    try {
+        DatabaseMetaData metaData = conn.getMetaData();
+        ResultSet resultSet = metaData.getTables(null, null, tableName.toUpperCase(), null);
+
+        if (resultSet.next()) {
+            System.out.println("Table '" + tableName + "' already exists in Schema 'PDC'.");
+            return;
+        }
+    } catch (SQLException ex) {
+        System.out.println(ex.getMessage());
+        return;
+    }
+
+    // Create the table if it doesn't exist
+    String sql = "CREATE TABLE " + tableName + " (" +
+        "ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY," +
+        "LAST_NAME VARCHAR(100)," +
+        "FIRST_NAME VARCHAR(100)," +
+        "EMAIL VARCHAR(100)," +
+        "MOBILE VARCHAR(20)," +
+        "CHECK_IN_DATE DATE," +
+        "CHECK_OUT_DATE DATE," +
+        "TOTAL_PRICE DECIMAL(10, 2)," +
+        "SELECTED_HOTEL VARCHAR(100)" +
+        ")";
+
+    updateDB(sql);
+}
+
+
+
+
+    
     //Establish connection
     public void establishConnection() {
         if (this.conn == null) {
