@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -19,7 +21,7 @@ import javax.swing.JPanel;
  *
  * @author ndg0757
  */
-public class BookingHistory extends JFrame{
+public final class BookingHistory extends JFrame{
     public static final int height = 400;
     public static final int width = 400;
     private JButton searchButton;
@@ -27,10 +29,13 @@ public class BookingHistory extends JFrame{
     private static final String URL = "jdbc:derby://localhost:1527/Hotel";
     private static final String USER_NAME = "pdc"; 
     private static final String PASSWORD = "pdc"; 
-  
+    private String userName;
+    private JMenuBar menuBar;
+    private JMenuItem exitMenu;
     
-    public BookingHistory(String userName)
+    public BookingHistory()
     {
+        this.userName = "";
         this.setTitle("Booking Check");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         
@@ -40,17 +45,24 @@ public class BookingHistory extends JFrame{
         this.setLayout(null);
         
         JLabel label = new JLabel("Your booking is : ");
-        label.setBounds(150,-30,300,100);
+        label.setBounds(0,-30,400,100);
         this.add(label);
         
-        displayBookingHistory(userName);
+        
+        menuBar = new JMenuBar();
+        exitMenu = new JMenuItem("Exit"); //program exit menuitem
+        menuBar.add(exitMenu);
+        this.setJMenuBar(menuBar);
+      
+        exitMenu.addActionListener(new CheckFrame.exit());
 
         this.setVisible(true);
     }
 
-   private void displayBookingHistory(String userName) {
+   public void displayBookingHistory(String userName) {
     DBmanager dbManager = new DBmanager();
     Connection conn = dbManager.getConnection();
+    boolean existed = false;
 
     try {
         String sql = "SELECT * FROM GUESTS WHERE FIRST_NAME = ?";
@@ -59,17 +71,37 @@ public class BookingHistory extends JFrame{
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    String bookingInfo = resultSet.getString("BOOKING_INFO");
-                    JLabel bookingLabel = new JLabel(bookingInfo);
-                    bookingLabel.setBounds(50, 50, 300, 30);
+                    existed = true;
+                    String lastName = resultSet.getString("LAST_NAME");
+                    String firstName = resultSet.getString("FIRST_NAME");
+                    String email = resultSet.getString("EMAIL");
+                    // Retrieve other columns as needed
+
+                    // Create a label to display the booking information
+                    JLabel bookingLabel = new JLabel("Last Name: " + lastName + ", First Name: " + firstName + ", Email: " + email);
+                    bookingLabel.setBounds(0, 50, 400, 30);
                     this.add(bookingLabel);
                 }
             }
+        }
+        if (!existed) {
+            JOptionPane.showMessageDialog(this, "Failed to find booking history.");
         }
     } catch (SQLException ex) {
         JOptionPane.showMessageDialog(this, "An error occurred while retrieving booking history.");
     } finally {
         dbManager.closeConnections();
     }
+    }
+
+
+   
+   public void setUserName(String userName)
+   {
+       this.userName = userName;
+   }
+   public String getUserName()
+   {
+       return this.userName;
    }
 }

@@ -82,10 +82,6 @@ public class BookingResultFrame extends JFrame
         this.setVisible(true); 
     }
 
-    BookingResultFrame() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
     private JLabel createLabel(String labelText, String value) { //For displaying the booking infromation
         JLabel label = new JLabel(labelText + " " + value);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);

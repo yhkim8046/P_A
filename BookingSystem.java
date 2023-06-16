@@ -99,25 +99,25 @@ public class BookingSystem extends JFrame {
 
         lastNameTextField = new JTextField(20);
         lastNamePanel = createQuestions("Last Name:", lastNameTextField);
-        lastNamePanel.setAlignmentX(0.5f); // Align center horizontally
+        lastNamePanel.setAlignmentX(0.5f); 
         mainPanel.add(lastNamePanel);
         
 
         firstNameTextField = new JTextField(20);
         firstNamePanel = createQuestions("First Name:", firstNameTextField);
-        firstNamePanel.setAlignmentX(0.5f); // Align center horizontally
+        firstNamePanel.setAlignmentX(0.5f); 
         mainPanel.add(firstNamePanel);
         
 
         emailTextField = new JTextField(20);
         emailPanel = createQuestions("E-mail Address:", emailTextField);
-        emailPanel.setAlignmentX(0.5f); // Align center horizontally
+        emailPanel.setAlignmentX(0.5f);
         mainPanel.add(emailPanel);
        
 
         mobileTextField = new JTextField(20);
         mobilePanel = createQuestions("Mobile:", mobileTextField);
-        mobilePanel.setAlignmentX(0.5f); // Align center horizontally
+        mobilePanel.setAlignmentX(0.5f); 
         mainPanel.add(mobilePanel);
         mainPanel.add(Box.createVerticalGlue());
 
@@ -141,8 +141,8 @@ public class BookingSystem extends JFrame {
         this.add(mainPanel, BorderLayout.CENTER);
 
         submitButton.addActionListener((ActionEvent e) -> {
-        guest = new Guest();
-         if (lastNameTextField.getText() != null && !lastNameTextField.getText().isEmpty()
+        guest = new Guest(); 
+         if (lastNameTextField.getText() != null && !lastNameTextField.getText().isEmpty()//checking the field is null or not
             && firstNameTextField.getText() != null && !firstNameTextField.getText().isEmpty()
             && emailTextField.getText() != null && !emailTextField.getText().isEmpty()
             && mobileTextField.getText() != null && !mobileTextField.getText().isEmpty()) {
@@ -150,8 +150,8 @@ public class BookingSystem extends JFrame {
         String checkInDateStr = checkInTextField.getText();
         String checkOutDateStr = checkOutTextField.getText();
         
-        try {
-            validateDateFormat(checkInDateStr);
+        try { //checking the date is valid or not. before 2023 can be booked, the check out date can not be earlier than check-in date and can not be same 
+            validateDateFormat(checkInDateStr); 
             validateDateFormat(checkOutDateStr);
             String lastEndDay = "31/12/2023";
             LocalDate lastDay = LocalDate.parse(lastEndDay, DateTimeFormatter.ofPattern("dd/MM/yyyy"));

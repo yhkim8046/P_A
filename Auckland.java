@@ -49,7 +49,7 @@ public class Auckland
         dbManager.closeConnections();
     }
 
-    public void displayHotels(JPanel panel) {
+    public void displayHotels(JPanel panel) { //Displaying the hotels are located in Auckland from the database
         DBmanager dbManager = new DBmanager();
         ResultSet resultSet = dbManager.queryDB("SELECT * FROM AucklandHotels");
 
@@ -65,8 +65,8 @@ public class Auckland
 
                 Hotel hotel = new Hotel(name, location, stars, cost);
                 
-                JLabel label = new JLabel(hotel.toString()); // Create a JLabel to display hotel details
-                panel.add(label); // Add the label to the panel
+                JLabel label = new JLabel(hotel.toString()); 
+                panel.add(label); 
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

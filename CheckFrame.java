@@ -28,11 +28,9 @@ public class CheckFrame extends JFrame{
     private JPanel panel;
     private JTextField t;
     private JPanel userPanel;
-    private String userName;
-    
+   
     public CheckFrame()
     {
-        this.userName = userName;
         this.setTitle("Check booking");
         this.dispose();
         this.setSize(width,height);
@@ -59,25 +57,32 @@ public class CheckFrame extends JFrame{
 
         userPanel = new JPanel();
         userPanel.setLayout(null);
-        t = new JTextField();
+        t = new JTextField(); //
+        
         t.setBounds(0, 0, 200, 20);
         userPanel.add(t);
         userPanel.setBounds(80, 120, 300, 100);
         this.add(userPanel);
+        
         
         JButton c = new JButton("Find booking");
         c.setBounds(150,150,100,50);
         this.add(c);
         c.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setUserName(t.getText());
-                BookingHistory bookingHistory = new BookingHistory(getUserName());
+                String userName = t.getText();
+                BookingHistory bookingHistory = new BookingHistory();//
+                bookingHistory.displayBookingHistory(userName);
                 bookingHistory.setVisible(true);
             }
         });
         
         
         this.setVisible(true);
+    }
+
+    void displayBookingHistory(String userName) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     public static class exit implements ActionListener //program exit function
@@ -88,12 +93,4 @@ public class CheckFrame extends JFrame{
         }
     }
     
-    public String getUserName()
-    {
-        return this.userName;
-    }
-    public void setUserName(String userName)
-    {
-        this.userName = userName;
-    }
 }

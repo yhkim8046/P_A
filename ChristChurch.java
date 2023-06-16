@@ -42,7 +42,7 @@ public class ChristChurch {
         dbManager.closeConnections();
     }
 
-    public void displayHotels(JPanel panel) {
+    public void displayHotels(JPanel panel) { //Displaying the hotels are located in ChristChurch from the database
         DBmanager dbManager = new DBmanager();
         ResultSet resultSet = dbManager.queryDB("SELECT * FROM ChristChurchHotels");
 
